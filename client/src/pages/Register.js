@@ -12,7 +12,7 @@ const initialState = {
 
 const Register = () => {
   const [values, setValues] = useState(initialState);
-  const { isLoading, showAlert, displayAlert } = useAppContext();
+  const {  showAlert, displayAlert } = useAppContext();   //isLoading,
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
