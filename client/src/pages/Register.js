@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "../assets/wrappers/RegisterPage.js";
 import { FormRow, Logo, Alert } from "../components/index.js";
 import { useAppContext } from "../context/appContext.js";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -11,21 +12,46 @@ const initialState = {
 };
 
 const Register = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
-  const {  showAlert, displayAlert } = useAppContext();   //isLoading,
+  const {
+    showAlert,
+    displayAlert,
+    registerUser,
+    isLoading,
+    loginUser,
+    user,
+  } = useAppContext();
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     const { name, email, password, isMember } = values;
 
     if (!email || !password || (!isMember && !name)) {
       displayAlert();
       return;
     }
+
+    const currentUser = { name, email, password };
+
+    if (isMember) {
+      loginUser(currentUser);
+    } else {
+      registerUser(currentUser);
+    }
   };
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  }, [user, navigate]);
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -81,7 +107,12 @@ const Register = () => {
 
         <p>
           {values.isMember ? "Not a member yet?" : "already a member?"}
-          <button type="button" className="member-btn" onClick={toggleMember}>
+          <button
+            type="button"
+            className="member-btn"
+            onClick={toggleMember}
+            disabled={isLoading}
+          >
             {values.isMember ? "Register" : "Login"}
           </button>
         </p>
@@ -91,3 +122,4 @@ const Register = () => {
 };
 
 export default Register;
+
