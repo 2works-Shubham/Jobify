@@ -14,11 +14,11 @@ import {
 } from "./actions";
 import axios from "axios";
 
-const user = localStorage.getItem("user");
-const token = localStorage.getItem("token");
-const userLocation = localStorage.getItem("location");
+const user = localStorage.getItem('user')
+const token = localStorage.getItem('token')
+const userLocation = localStorage.getItem('location')
 
-export const initialState = {
+  const initialState = {
   isLoading: false,
   showAlert: false,
   alertText: "",
@@ -52,8 +52,10 @@ const AppProvider = ({ children }) => {
     }, 1000);
   };
 
-  //! local Storage /adding and removing [token] from local storage
+  //****************************************************** AKASH-CODE-START ********************************************************
 
+  //! local Storage /adding and removing [token] from local storage
+  /*
      const addUserToLocalStorage = ({ user, token, location }) => {
 
           localStorage.setItem('user', JSON.stringify(user))
@@ -177,93 +179,105 @@ const AppProvider = ({ children }) => {
 
       }
 
-  
+  */
+  //****************************************************** AKASH-CODE-END ********************************************************
 
- 
-//-------------------------------------------------
-  // Store user,token,location into localStorage bcoz after refreshing the page it will uses local  storage values
-  // const addUserToLocalStorage = ({ user, token, location }) => {
-  //   localStorage.setItem("user", JSON.stringify(user));
-  //   localStorage.setItem("token", token);
-  //   localStorage.setItem("location", location);
-  // };
+  //****************************************************** MY-CODE-START ********************************************************
 
-  // const removeUserFromLocalStorage = () => {
-  //   localStorage.removeItem("user");
-  //   localStorage.removeItem("token");
-  //   localStorage.removeItem("location");
-  // };
+  //************************************ LOCAL-STORAGE-START ************************************
 
-  // const registerUser = async (currentUser) => {
-  //   dispatch({ type: REGISTER_USER_BEGIN });
+  // Store user,token,location into localStorage bcoz after refreshing the page it will uses local storage values
+  const addUserToLocalStorage = ({ user, token, location }) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
+    localStorage.setItem("location", location);
+  };
 
-  //   try {
-  //     const response = await axios.post("/api/v1/auth/register", currentUser);
-  //     const { user, token, location } = response.data;
-  //     console.log(response);
-  //     dispatch({
-  //       type: REGISTER_USER_SUCCESS,
-  //       payload: {
-  //         user,
-  //         token,
-  //         location,
-  //       },
-  //     });
-  //     addUserToLocalStorage({ user, token, location });
-  //   } catch (error) {
-  //     console.log(error.response);
-  //     dispatch({
-  //       type: REGISTER_USER_ERROR,
-  //       payload: { msg: error.response.data.msg },
-  //     });
-  //   }
-  //   clearAlert();
-  // };
+  const removeUserFromLocalStorage = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("location");
+  };
+  //************************************ LOCAL-STORAGE-END ************************************
 
-  // // login
-  // const loginUser = async (currentUser) => {
-  //   dispatch({ type: LOGIN_USER_BEGIN });
+  //************************************ REGISTER-USER-START ************************************
 
-  //   try {
-  //     const { data } = await axios.post("/api/v1/auth/login", currentUser);
-  //     const { user, token, location } = data;
-    
-  //     console.log('====================================');
-  //     console.log(user);
-  //     console.log('====================================');
+  const registerUser = async (currentUser) => {
+    dispatch({ type: REGISTER_USER_BEGIN });
 
-  //     dispatch({
-  //       type: LOGIN_USER_SUCCESS,
-  //       payload: {
-  //         user,
-  //         token,
-  //         location,
-  //       },
-  //     });
+    try {
+      const response = await axios.post("/api/v1/auth/register", currentUser);
+      const { user, token, location } = response.data;
+      console.log(response);
+      dispatch({
+        type: REGISTER_USER_SUCCESS,
+        payload: {
+          user,
+          token,
+          location,
+        },
+      });
+      addUserToLocalStorage({ user, token, location });
+    } catch (error) {
+      console.log(error.response);
+      dispatch({
+        type: REGISTER_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+  //************************************ REGISTER-USER-END ************************************
 
-  //     addUserToLocalStorage({ user, token, location });
-  //   } catch (error) {
-  //     console.log(error);
+  //************************************ LOGIN-USER-START ************************************
 
-      // dispatch({
-      //   type: LOGIN_USER_ERROR,
-      //   payload: { msg: error.response.data.msg },
-      // });
-  //   }
-  //   clearAlert();
-  // };
+  const loginUser = async (currentUser) => {
+    dispatch({ type: LOGIN_USER_BEGIN });
 
-  // TOGGLE_SIDEBAR
+    try {
+      const { data } = await axios.post("/api/v1/auth/login", currentUser);
+      const { user, token, location } = data;
+
+      console.log("====================================");
+      console.log(user);
+      console.log("====================================");
+
+      dispatch({
+        type: LOGIN_USER_SUCCESS,
+        payload: {
+          user,
+          token,
+          location,
+        },
+      });
+
+      const hello = user;
+      console.log("Payload data ===>>" + hello);
+
+      addUserToLocalStorage({ user, token, location });
+    } catch (error) {
+      // console.log(error);
+      dispatch({
+        type: LOGIN_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+  //************************************ LOGIN-USER-END ************************************
+
+  //************************************ TOGGLE-SIDEBAR-START ******************************
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
   };
+  //************************************ TOGGLE-SIDEBAR-END ********************************
 
-
-  //LOGOUT_USER
+  //************************************ LOGOUT-USER-START *********************************
   const logoutUser = () => {
     dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
   };
+  //************************************ LOGOUT-USER-END ***********************************
 
   return (
     <AppContext.Provider
@@ -289,4 +303,6 @@ const useAppContext = () => {
   return useContext(AppContext);
 };
 
-export { AppProvider, useAppContext };
+export { AppProvider,initialState, useAppContext };
+
+

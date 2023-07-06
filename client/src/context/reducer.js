@@ -11,7 +11,7 @@ import {
   LOGOUT_USER,
 } from "./actions";
 
-import {initialState} from './appContext.js'
+import { initialState } from './appContext'
 
 export const reducer = (state, action) => {
   if (action.type === DISPLAY_ALERT) {

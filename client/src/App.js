@@ -1,5 +1,5 @@
 import React from "react";
-import { Landing, Register, Error, ProtectedRoute } from "../src/pages/index.js";
+import { Landing, Register, Error } from "../src/pages/index.js";  //ProtectedRoute
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   Stats,
@@ -17,7 +17,7 @@ function App() {
           <Route path="/" element={
           // <ProtectedRoute>
             <SharedLayout />
-          // </ProtectedRoute>
+          //  </ProtectedRoute>
           }>
             <Route index element={<Stats />} />
             <Route path="/add-job" element={<AddJob />} />
