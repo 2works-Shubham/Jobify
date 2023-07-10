@@ -19,7 +19,6 @@ const Profile = () => {
       displayAlert();
       return;
     }
-
     updateUser({ name, email, lastname, location });
   };
 
@@ -56,7 +55,7 @@ const Profile = () => {
             handleChange={(e) => setLocation(e.target.value)}
           />
           <button className="btn bt-block" type="submit" disabled={isLoading}>
-            {isLoading?'Please wait...' : 'Save changes'}
+            {isLoading ? "Please wait..." : "Save changes"}
           </button>
         </div>
       </form>

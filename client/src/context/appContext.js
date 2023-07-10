@@ -11,6 +11,9 @@ import {
   LOGIN_USER_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
 } from "./actions";
 import axios from "axios";
 
@@ -40,9 +43,6 @@ const AppProvider = ({ children }) => {
   // Axios-setup
   const authFetch = axios.create({
     baseURL: "/api/v1",
-    // headers:{
-    //   Authorization: `Bearer ${state.token}`,
-    // }
   });
 
   // Request
@@ -50,26 +50,25 @@ const AppProvider = ({ children }) => {
     (config) => {
       // config.headers.common["Authorization"] = `Bearer ${state.token}`;  //Not working with 'common'
       config.headers["Authorization"] = `Bearer ${state.token}`;
-      return config
-    },(error) => {
-      return Promise.reject(error)
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-  )
+  );
 
   // Response
   authFetch.interceptors.response.use(
     (response) => {
-      return response
+      return response;
     },
     (error) => {
-      console.log(error.response)
-      if(error.response.status===401)
-      {
-        console.log("AUTH ERROR");
+      if (error.response.status === 401) {
+        logoutUser();
       }
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
-  )
+  );
 
   const displayAlert = () => {
     dispatch({
@@ -191,13 +190,32 @@ const AppProvider = ({ children }) => {
 
   //************************************ UPDATE-USER-START *********************************
   const updateUser = async (currentUser) => {
-    // console.log(currentUser);
+    dispatch({ type: UPDATE_USER_BEGIN });
+
     try {
       const { data } = await authFetch.patch("/auth/updateUser", currentUser);
       console.log(data);
+      const { user, token, location } = data;
+
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: {
+          user,
+          token,
+          location,
+        },
+      });
+
+      addUserToLocalStorage({ user, token, location });
     } catch (error) {
-      // console.log(error.response);
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
     }
+    clearAlert();
   };
   //************************************ UPDATE-USER-END ***********************************
 
