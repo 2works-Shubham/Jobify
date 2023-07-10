@@ -37,6 +37,8 @@ const AppProvider = ({ children }) => {
   // const [state, setState] = useState(initialState);
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  axios.defaults.headers.common["Authorization"] = `Bearer ${state.token}`;
+
   const displayAlert = () => {
     dispatch({
       type: DISPLAY_ALERT,
@@ -159,16 +161,14 @@ const AppProvider = ({ children }) => {
   const updateUser = async (currentUser) => {
     // console.log(currentUser);
     try {
-      const { data } = await axios.patch(
-        "/api/v1/auth/updateUser",
-        currentUser,
-        {
-          headers: {
-            Authorization: `Bearer ${state.token}`,
-          },
-        }
-      );
+      const { data } = await axios.patch("/api/v1/auth/updateUser",currentUser)
+      
+      //for axios global setup - it will add Authorization with token for every API request
+      const {data:tours } = await axios.get("https://course-api.com/react-tours-project")
       console.log(data);
+      console.log(tours);
+
+
     } catch (error) {
       console.log(error.response);
     }
