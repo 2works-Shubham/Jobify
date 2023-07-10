@@ -58,7 +58,6 @@ const AppProvider = ({ children }) => {
 
   //****************************************************** AKASH-CODE-END ********************************************************
 
-
   //****************************************************** MY-CODE-START ********************************************************
 
   //************************************ LOCAL-STORAGE-START ************************************
@@ -158,7 +157,21 @@ const AppProvider = ({ children }) => {
 
   //************************************ UPDATE-USER-START *********************************
   const updateUser = async (currentUser) => {
-    console.log(currentUser);
+    // console.log(currentUser);
+    try {
+      const { data } = await axios.patch(
+        "/api/v1/auth/updateUser",
+        currentUser,
+        {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        }
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error.response);
+    }
   };
   //************************************ UPDATE-USER-END ***********************************
 
@@ -188,12 +201,10 @@ const useAppContext = () => {
 
 export { AppProvider, initialState, useAppContext };
 
+//****************************************************** AKASH-CODE-START ********************************************************
 
-
-  //****************************************************** AKASH-CODE-START ********************************************************
-
-  //! local Storage /adding and removing [token] from local storage
-  /*
+//! local Storage /adding and removing [token] from local storage
+/*
      const addUserToLocalStorage = ({ user, token, location }) => {
 
           localStorage.setItem('user', JSON.stringify(user))
@@ -318,4 +329,4 @@ export { AppProvider, initialState, useAppContext };
       }
 
   */
-  //****************************************************** AKASH-CODE-END ********************************************************
+//****************************************************** AKASH-CODE-END ********************************************************
